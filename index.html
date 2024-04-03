@@ -1,8 +1,23 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Alfon</title>
-    Hi
+<head>
+    <title>Video Stream</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body>
+    <video id="video1" controls autoplay muted playsinline></video>
 
-    <video autoplay="" class="vjs-tech" fluid="true" id="video1_html5_api" muted="muted" playsinline="playsinline" preload="auto" tabindex="-1" src="blob:https://www.gipuzkoa.eus/c1dff067-84f0-428b-a750-2ffdf87fb56c"><source src="https://58f14c0895a20.streamlock.net/camaramar/GIP_zurriola_169.stream/playlist.m3u8" type="application/x-mpegURL"></video>
+    <script>
+        var video = document.getElementById('video1');
+        var videoSrc = 'https://58f14c0895a20.streamlock.net/camaramar/GIP_zurriola_169.stream/playlist.m3u8';
+
+        if (Hls.isSupported()) {
+            var hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoSrc;
+        }
+    </script>
+</body>
 </html>
