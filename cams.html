@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HLS Streaming</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            height: 100%;
+            width: 100%;
+        }
+        .grid-item {
+            width: 100%;
+            height: 100%;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        <div class="grid-item"><video id="video1" controls autoplay></video></div>
+        <div class="grid-item"><video id="video2" controls autoplay></video></div>
+        <div class="grid-item"><video id="video3" controls autoplay></video></div>
+        <div class="grid-item"><video id="video4" controls autoplay></video></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        const streams = [
+            'https://cams.cdn-surfline.com/cdn-wc/wc-oceanbeachsf/playlist.m3u8',
+            'https://cams.cdn-surfline.com/cdn-wc/wc-pacificalindamarnorth/playlist.m3u8',
+            'https://cams.cdn-surfline.com/cdn-wc/wc-pacificalindamarsouth/playlist.m3u8',
+            'https://cams.cdn-surfline.com/cdn-wc/wc-steamer/playlist.m3u8'
+        ];
+
+        streams.forEach((stream, index) => {
+            const video = document.getElementById(`video${index + 1}`);
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(stream);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                    video.play();
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = stream;
+                video.addEventListener('loadedmetadata', function () {
+                    video.play();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
